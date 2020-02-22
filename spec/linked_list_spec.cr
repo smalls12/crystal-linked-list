@@ -201,4 +201,14 @@ describe LinkedList do
       end
     end
   end
+
+  describe "#to_s" do
+    it "confirm the string output for a linked list" do
+      list = LinkedList(Int32 | String).new
+      list.append(1)
+      list.append(2)
+      list.append("test")
+      list.to_s.should eq "[ 1, 2, test ]"
+    end
+  end
 end

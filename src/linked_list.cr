@@ -287,6 +287,36 @@ class LinkedList(A)
     end
   end
 
+  # Overloading the to_s function to print the contents
+  # of the linked list
+  # This calls the to_s function of each node in the
+  # linked list
+  #
+  # ```
+  # values = [1, 2, 3]
+  # puts values
+  #
+  # The above produces:
+  # 
+  # ```text
+  # [ 1, 2, 3 ]
+  # ```
+  def to_s(io)
+    io << "[ "
+
+    # iterate through the nodes in the linked list
+    each_node do |elem|
+      io << elem.value
+      # kind of clunky, if this is the tail node 
+      # don't print the comma
+      if elem != @tail
+        io << ", "
+      end
+    end
+
+    io << " ]"
+  end
+
   # A node is the building block of linked lists consisting of a values
   # and a pointer to the next node in the linked list.
   #
@@ -346,6 +376,12 @@ class LinkedList(A)
     # ```
     def next=(next_node : Node(T) | Nil)
       @next = next_node
+    end
+
+    # Overloading the to_s function to print the contents
+    # of the node
+    def to_s(io)
+      io << @value
     end
   end
 end
