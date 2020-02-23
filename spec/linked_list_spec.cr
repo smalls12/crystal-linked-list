@@ -92,6 +92,45 @@ describe LinkedList do
 
       list.size.should eq 1
 
+      list[0].should eq 1
+    end
+
+    it "insert fails if not contiguous" do
+      list = LinkedList(Int32).new
+      list.insert_at(1, 1)
+      list.size.should eq 0
+    end
+
+    it "insert into a populated list at index 0 ( unshift )" do
+      list = LinkedList(Int32).new(1, 2)
+      list.insert_at(3, 0)
+
+      list.size.should eq 3
+
+      list[0].should eq 3
+      list[1].should eq 1
+      list[2].should eq 2
+    end
+
+    it "insert into a populated list at index n" do
+      list = LinkedList(Int32).new(1, 2)
+      list.insert_at(3, 1)
+
+      list.size.should eq 3
+
+      list[0].should eq 1
+      list[1].should eq 3
+      list[2].should eq 2
+    end
+  end
+
+  describe "#insert_at" do
+    it "insert into an empty list at index 0" do
+      list = LinkedList(Int32).new
+      list.insert_at(1, 0)
+
+      list.size.should eq 1
+
       list_a = list.to_a
 
       list_a[0].should eq 1
@@ -259,6 +298,16 @@ describe LinkedList do
     end
   end
 
+  describe "#index_operator" do
+    it "get multiple elements via the index" do
+      list = LinkedList(Int32).new
+      list.append(1)
+      list.append(2)
+      list[0].should eq 1
+      list[1].should eq 2
+    end
+  end
+
   describe "#to_a" do
     it "linked list converted into an array" do
       list = LinkedList(Int32).new(1, 2)
@@ -293,12 +342,10 @@ describe LinkedList do
       result = first_list + array
       result.size.should eq 4
 
-      result_array = result.to_a
-
-      result_array[0].should eq 1
-      result_array[1].should eq 2
-      result_array[2].should eq "foo"
-      result_array[3].should eq "bar"
+      result[0].should eq 1
+      result[1].should eq 2
+      result[2].should eq "foo"
+      result[3].should eq "bar"
     end
   end
 
@@ -310,12 +357,10 @@ describe LinkedList do
       first_list.concat(second_list)
       first_list.size.should eq 4
 
-      result_array = first_list.to_a
-
-      result_array[0].should eq 1
-      result_array[1].should eq 2
-      result_array[2].should eq 3
-      result_array[3].should eq 4
+      first_list[0].should eq 1
+      first_list[1].should eq 2
+      first_list[2].should eq 3
+      first_list[3].should eq 4
     end
   end
 
@@ -371,9 +416,7 @@ describe LinkedList do
       list.append(4)
       list.size.should eq 1
 
-      list_a = list.to_a
-
-      list_a[0].should eq 4
+      list[0].should eq 4
 
     end
 
@@ -387,9 +430,7 @@ describe LinkedList do
       list.append(4)
       list.size.should eq 1
 
-      list_a = list.to_a
-
-      list_a[0].should eq 4
+      list[0].should eq 4
 
     end
 
@@ -405,9 +446,7 @@ describe LinkedList do
       reversed_list.append(4)
       reversed_list.size.should eq 1
 
-      reversed_list_a = reversed_list.to_a
-
-      reversed_list_a[0].should eq 4
+      reversed_list[0].should eq 4
     end
   end
 

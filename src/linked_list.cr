@@ -271,6 +271,34 @@ class LinkedList(A)
     end
   end
 
+  def [](index : Int32)
+    return nil if @head.nil?
+
+    if index == 0
+      return @head.not_nil!.value
+    end
+
+    # start at head and move to the index
+    last = @tail
+    previous = @head
+    current = @head.not_nil!.next.not_nil!
+
+    search = 1
+
+    while current != last && search < index
+      previous = previous.not_nil!.next.not_nil!
+      current = current.next.not_nil!
+      search += 1
+    end
+
+    # made it to the desired index
+    if search != index
+      return nil
+    end
+
+    current.value
+  end
+
   # Adds all the elemenets of the *list* to the end of the current linked list.
   #
   # ```
