@@ -15,11 +15,14 @@
 # 2
 # ```
 class LinkedList(A)
+  @head : Node(A) | Nil
+  @tail : Node(A) | Nil
+
   include Enumerable(A | Nil)
 
   # Creates an empty linked list.
   def initialize
-    @head = Node(A).new
+    @head = nil
     @tail = @head
   end
 
@@ -30,7 +33,7 @@ class LinkedList(A)
 
   # ditto
   def initialize(values : Enumerable(A))
-    @head = Node(A).new
+    @head = nil
     @tail = @head
     values.each do |value|
       append(value)
@@ -47,10 +50,15 @@ class LinkedList(A)
   # list.pop() # => 1
   # ```
   def append(value : A)
-    new_node = Node(A).new(value)
-    @tail.next = new_node
-    @tail = new_node
-    new_node.value
+    if @head.nil?
+      @head = Node(A).new(value)
+      @tail = @head
+    else
+      new_node = Node(A).new(value)
+      @tail.not_nil!.next = new_node
+      @tail = new_node
+      new_node.value
+    end
   end
 
   # ditto
@@ -87,6 +95,13 @@ class LinkedList(A)
     end
   end
 
+  # same as append
+  def push(*values)
+    values.each do |value|
+      push(value)
+    end
+  end
+
   # Adds a *value* to the beginning of a linked list.
   #
   # ```
@@ -96,12 +111,13 @@ class LinkedList(A)
   # list.pop() # => 2
   # ```
   def unshift(value : A)
-    new_top = Node(A).new(value)
-    if @tail == @head
-      @tail = new_top
+    if @head.nil?
+      append(value)
+      return
     end
-    new_top.next = @head.next
-    @head.next = new_top
+    new_top = Node(A).new(value)
+    new_top.next = @head
+    @head = new_top
     new_top.value
   end
 
@@ -114,10 +130,10 @@ class LinkedList(A)
   # list.peek() # => 4.56
   # ```
   def shift
-    return if @head.next.nil?
+    return if @head.nil?
 
-    first = @head.next.not_nil!
-    @head.next = first.next
+    first = @head.not_nil!
+    @head = head.not_nil!.next
     first.value
   end
 
@@ -130,7 +146,8 @@ class LinkedList(A)
   # list.peek() # => 4.56
   # ```
   def peek
-    @tail.value
+    return nil if @tail.nil?
+    @tail.not_nil!.value
   end
 
   # Returns the last `Node` from the list and removes it.
@@ -142,17 +159,24 @@ class LinkedList(A)
   # list.peek() # => 1.23
   # ```
   def pop
-    return nil if @head == @tail
+    return nil if @head.nil?
+
+    if @head == @tail
+      current = @head
+      @head = nil
+      @tail = nil
+      return current.not_nil!.value
+    end
 
     last = @tail
     current = @head
-    while current.next != last
-      current = current.next.not_nil!
+    while current.not_nil!.next != last
+      current = current.not_nil!.next.not_nil!
     end
 
-    current.next = nil
+    current.not_nil!.next = nil
     @tail = current
-    last.value
+    last.not_nil!.value
   end
 
   # Iterates over all the values in the linked list.
@@ -209,7 +233,7 @@ class LinkedList(A)
   # combined_list.shift() # => 1
   # ```
   def concat(list : LinkedList(A))
-    @tail.next = list.head.next
+    @tail.not_nil!.next = list.head
     @tail = list.tail
     self
   end
@@ -223,7 +247,7 @@ class LinkedList(A)
   # list.empty? # => false
   # ```
   def empty?
-    @head == @tail
+    @head.nil?
   end
 
   # Creates a copy of the `LinkedList` with the order reversed.
@@ -280,10 +304,13 @@ class LinkedList(A)
   # 3
   # ```
   private def each_node
+    return nil if @head.nil?
+
     current = @head
-    until current.next.nil?
-      current = current.next.not_nil!
-      yield current
+    loop do
+      yield current.not_nil!
+      current = current.not_nil!.next
+      break if current.nil?
     end
   end
 
@@ -297,7 +324,7 @@ class LinkedList(A)
   # puts values
   #
   # The above produces:
-  # 
+  #
   # ```text
   # [ 1, 2, 3 ]
   # ```
@@ -307,7 +334,7 @@ class LinkedList(A)
     # iterate through the nodes in the linked list
     each_node do |elem|
       io << elem.value
-      # kind of clunky, if this is the tail node 
+      # kind of clunky, if this is the tail node
       # don't print the comma
       if elem != @tail
         io << ", "
