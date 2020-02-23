@@ -66,6 +66,54 @@ class LinkedList(A)
     append(value)
   end
 
+  # Adds a *value* to the linked list at a specified index.
+  #
+  # ```
+  # list = LinkedList(Int32).new
+  # list.append(1)
+  # list.append(2)
+  # list.insert_at(3, 1)
+  # ```
+  def insert_at(value : A, index : Int32)
+    # non-contiguous
+    return nil if index > size
+
+    # inserting at the beginning is the unshift function
+    if index == 0
+      unshift(value)
+      return
+    end
+
+    # not index 0, but list is empty
+    # non-contiguous
+    if @head.nil?
+      return nil
+    end
+
+    # start at head and move to the index
+    last = @tail
+    previous = @head
+    current = @head.not_nil!.next.not_nil!
+
+    search = 1
+
+    while current != last && search < index
+      previous = current
+      current = current.next.not_nil!
+      search += 1
+    end
+
+    # made it to the desired index
+    if search != index
+      return nil
+    end
+
+    new_node = Node(A).new(value)
+
+    previous.not_nil!.next = new_node
+    new_node.next = current
+  end
+
   # Override the << (shift) operator to add a *value* to the end of a
   # linked list. This method returns itself so it can be chained.
   #

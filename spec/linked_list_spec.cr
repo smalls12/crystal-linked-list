@@ -85,6 +85,51 @@ describe LinkedList do
     end
   end
 
+  describe "#insert_at" do
+    it "insert into an empty list at index 0" do
+      list = LinkedList(Int32).new
+      list.insert_at(1, 0)
+
+      list.size.should eq 1
+
+      list_a = list.to_a
+
+      list_a[0].should eq 1
+    end
+
+    it "insert fails if not contiguous" do
+      list = LinkedList(Int32).new
+      list.insert_at(1, 1)
+      list.size.should eq 0
+    end
+
+    it "insert into a populated list at index 0 ( unshift )" do
+      list = LinkedList(Int32).new(1, 2)
+      list.insert_at(3, 0)
+
+      list.size.should eq 3
+
+      list_a = list.to_a
+
+      list_a[0].should eq 3
+      list_a[1].should eq 1
+      list_a[2].should eq 2
+    end
+
+    it "insert into a populated list at index n" do
+      list = LinkedList(Int32).new(1, 2)
+      list.insert_at(3, 1)
+
+      list.size.should eq 3
+
+      list_a = list.to_a
+
+      list_a[0].should eq 1
+      list_a[1].should eq 3
+      list_a[2].should eq 2
+    end
+  end
+
   describe "#<<" do
     it "increases the size of the list by 1" do
       list = LinkedList(Nil).new(nil)
