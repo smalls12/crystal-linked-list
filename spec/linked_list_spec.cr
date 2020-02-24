@@ -9,7 +9,7 @@ describe LinkedList do
 
     it "initializes the list with the given values" do
       list = LinkedList(Nil | Int32 | String).new(1, 13, "foo")
-      list.size.should eq 3
+
       list_array = list.to_a
       list_array[0].should eq 1
       list_array[1].should eq 13
@@ -32,7 +32,6 @@ describe LinkedList do
   describe "#append" do
     it "increases the size of the list by 1" do
       list = LinkedList(Nil).new(nil)
-      list.size.should eq 1
 
       list.append(nil)
 
@@ -42,7 +41,6 @@ describe LinkedList do
 
     it "appends multiple elements to the list" do
       list = LinkedList(Int32 | String).new
-      list.size.should eq 0
 
       list.append(1, "foo")
 
@@ -54,7 +52,6 @@ describe LinkedList do
   describe "#push" do
     it "increases the size of the list by 1" do
       list = LinkedList(Nil).new(nil)
-      list.size.should eq 1
 
       list.push(nil)
 
@@ -64,7 +61,6 @@ describe LinkedList do
 
     it "adds the element to the end of the list" do
       list = LinkedList(Int32).new(1)
-      list.size.should eq 1
       list.peek.should eq 1
 
       list.push(2)
@@ -75,7 +71,6 @@ describe LinkedList do
 
     it "push multiple elements to the list" do
       list = LinkedList(Int32).new
-      list.size.should eq 0
       list.peek.should eq nil
 
       list.push(1, 2)
